@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusLost - University Lost & Found</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="light">
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-search"></i>
+                <span class="logo-primary">Campus</span><span class="logo-secondary">Lost</span>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#lost-items">Lost Items</a></li>
+                <li><a href="#found-items">Found Items</a></li>
+                <li><a href="#report-lost">Report Lost</a></li>
+                <li><a href="#report-found">Report Found</a></li>
+            </ul>
+            
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Lost Something on Campus?</h1>
+            <p>Connect with fellow students to recover your lost items or help others find what they've lost.</p>
+            <div class="action-buttons">
+                <button class="btn btn-warning" onclick="showSection('report-lost')">
+                    <i class="fas fa-exclamation-triangle"></i> Report Lost Item
+                </button>
+                <button class="btn btn-success" onclick="showSection('report-found')">
+                    <i class="fas fa-check-circle"></i> Report Found Item
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lost Items Section -->
+    <section class="items-section" id="lost-items">
+        <div class="container">
+            <div class="section-title">
+                <h2><i class="fas fa-exclamation-circle"></i> Recently Lost Items</h2>
+                <p>Help your fellow students find their lost belongings</p>
+            </div>
+            
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterItems('all')">All Items</button>
+                <button class="filter-btn" onclick="filterItems('Books')">Books</button>
+                <button class="filter-btn" onclick="filterItems('Electronics')">Electronics</button>
+                <button class="filter-btn" onclick="filterItems('Accessories')">Accessories</button>
+                <button class="filter-btn" onclick="filterItems('Others')">Others</button>
+            </div>
+            
+            <div class="items-grid" id="lostItemsGrid">
+                <!-- Lost items will be loaded here dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Found Items Section -->
+    <section class="items-section" id="found-items" style="background-color: var(--card-bg);">
+        <div class="container">
+            <div class="section-title">
+                <h2><i class="fas fa-check-circle"></i> Recently Found Items</h2>
+                <p>Check if someone found what you're looking for</p>
+            </div>
+            
+            <div class="items-grid" id="foundItemsGrid">
+                <!-- Found items will be loaded here dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Report Lost Form -->
+    <section class="form-section hidden" id="report-lost">
+        <div class="container">
+            <div class="form-container">
+                <h2 class="form-title"><i class="fas fa-exclamation-triangle"></i> Report Lost Item</h2>
+                <form id="lostForm">
+                    <div class="form-group">
+                        <label for="lostItemName">Item Name *</label>
+                        <input type="text" id="lostItemName" class="form-control" placeholder="e.g., MacBook Pro, Physics Textbook" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lostCategory">Category *</label>
+                        <select id="lostCategory" class="form-control" required>
+                            <option value="">Select Category</option>
+                            <option value="Books">Books & Notes</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="ID Cards">ID Cards</option>
+                            <option value="Bags">Bags & Wallets</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lostDescription">Description *</label>
+                        <textarea id="lostDescription" class="form-control" placeholder="Describe your item in detail (color, brand, distinguishing features...)" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lostLocation">Where did you lose it? *</label>
+                        <input type="text" id="lostLocation" class="form-control" placeholder="e.g., Library, Room 201, Cafeteria" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lostDate">When did you lose it? *</label>
+                        <input type="date" id="lostDate" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lostContact">Contact Information *</label>
+                        <input type="text" id="lostContact" class="form-control" placeholder="Email or Phone Number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Upload Image (Optional)</label>
+                        <div class="image-preview" id="lostImagePreview">
+                            <i class="fas fa-camera"></i> No image selected
+                        </div>
+                        <input type="file" id="lostImage" class="form-control" accept="image/*" onchange="previewImage('lostImage', 'lostImagePreview')">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-warning" style="width: 100%;">
+                        <i class="fas fa-paper-plane"></i> Report Lost Item
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Report Found Form -->
+    <section class="form-section hidden" id="report-found">
+        <div class="container">
+            <div class="form-container">
+                <h2 class="form-title"><i class="fas fa-check-circle"></i> Report Found Item</h2>
+                <form id="foundForm">
+                    <div class="form-group">
+                        <label for="foundItemName">Item Name *</label>
+                        <input type="text" id="foundItemName" class="form-control" placeholder="e.g., Water Bottle, Calculator" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="foundCategory">Category *</label>
+                        <select id="foundCategory" class="form-control" required>
+                            <option value="">Select Category</option>
+                            <option value="Books">Books & Notes</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="ID Cards">ID Cards</option>
+                            <option value="Bags">Bags & Wallets</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="foundDescription">Description *</label>
+                        <textarea id="foundDescription" class="form-control" placeholder="Describe the item you found..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="foundLocation">Where did you find it? *</label>
+                        <input type="text" id="foundLocation" class="form-control" placeholder="e.g., Lecture Hall B, Sports Ground" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="foundDate">When did you find it? *</label>
+                        <input type="date" id="foundDate" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="foundContact">Contact Information *</label>
+                        <input type="text" id="foundContact" class="form-control" placeholder="Email or Phone Number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Upload Image (Optional)</label>
+                        <div class="image-preview" id="foundImagePreview">
+                            <i class="fas fa-camera"></i> No image selected
+                        </div>
+                        <input type="file" id="foundImage" class="form-control" accept="image/*" onchange="previewImage('foundImage', 'foundImagePreview')">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success" style="width: 100%;">
+                        <i class="fas fa-paper-plane"></i> Report Found Item
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>CampusLost</h3>
+                    <p>Helping university students recover lost items and build a supportive campus community.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#lost-items">Lost Items</a></li>
+                        <li><a href="#found-items">Found Items</a></li>
+                        <li><a href="#report-lost">Report Lost</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Books & Notes</a></li>
+                        <li><a href="#">Electronics</a></li>
+                        <li><a href="#">Accessories</a></li>
+                        <li><a href="#">ID Cards</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> help@campuslost.edu</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Student Center, Room 101</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 CampusLost. Helping students since 2025.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
